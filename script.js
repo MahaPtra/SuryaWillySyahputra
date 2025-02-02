@@ -1,8 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Cek apakah elemen audio sudah ada
     let audio = document.getElementById("bg-music");
 
-    // Jika belum ada, buat audio baru
     if (!audio) {
         audio = document.createElement("audio");
         audio.id = "bg-music";
@@ -12,27 +10,30 @@ document.addEventListener("DOMContentLoaded", function () {
         document.body.appendChild(audio);
     }
 
-    // Cek status musik dari Local Storage
     let musicStatus = localStorage.getItem("musicStatus");
     let lastPosition = localStorage.getItem("musicPosition") || 0;
-
-    // Set posisi terakhir sebelum dimainkan
     audio.currentTime = lastPosition;
 
-    // **Musik akan auto play jika ini pertama kali user membuka halaman**
     if (musicStatus === null || musicStatus === "playing") {
         audio.play();
-        localStorage.setItem("musicStatus", "playing"); // Simpan status playing di localStorage
+        localStorage.setItem("musicStatus", "playing");
     }
 
-    // Buat tombol Play/Pause
+    // Buat tombol Play/Pause dengan teks awal "Play Music"
     const button = document.createElement("button");
     button.id = "musicButton";
     button.className = "fixed bottom-4 right-4 bg-white text-black px-4 py-2 rounded-full shadow-lg hover:to-accent px-6 py-5 transition rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105";
-    button.textContent = audio.paused ? "Play Music" : "Pause Music";
+    button.textContent = "Play Music"; // Teks awal
+
     document.body.appendChild(button);
 
-    // Event untuk tombol Play/Pause
+    // Setelah auto-play, ubah teks button menjadi "Pause Music"
+    setTimeout(() => {
+        if (!audio.paused) {
+            button.textContent = "Pause Music";
+        }
+    }, 100); // Ganti teks setelah musik mulai
+
     button.addEventListener("click", function () {
         if (audio.paused) {
             audio.play();
@@ -45,14 +46,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Simpan posisi lagu setiap 1 detik agar tidak mengulang dari awal
     setInterval(() => {
         if (!audio.paused) {
             localStorage.setItem("musicPosition", audio.currentTime);
         }
     }, 1000);
 
-    // Pastikan musik tidak play otomatis jika sebelumnya dipause
     document.addEventListener("visibilitychange", function () {
         if (!document.hidden) {
             let musicStatus = localStorage.getItem("musicStatus");
