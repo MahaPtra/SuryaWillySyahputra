@@ -1,12 +1,11 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Ambil iframe dan akses musik di dalamnya
-    let iframe = document.querySelector("iframe");
-    let audio;
+    let iframe = document.getElementById("musicFrame");
 
     iframe.onload = function () {
-        audio = iframe.contentWindow.document.getElementById("bg-music");
+        let iframeDoc = iframe.contentWindow.document;
+        let audio = iframeDoc.getElementById("bg-music");
 
-        // Pastikan musik auto-play saat pertama kali halaman dibuka
+        // Cek status musik
         let musicStatus = localStorage.getItem("musicStatus") || "playing";
         if (musicStatus === "playing") {
             audio.play();
@@ -14,14 +13,17 @@ document.addEventListener("DOMContentLoaded", function () {
             audio.pause();
         }
 
-        // Buat tombol Play/Pause
-        const button = document.createElement("button");
-        button.id = "musicButton";
-        button.className = "fixed bottom-4 right-4 bg-white text-black px-4 py-2 rounded-full shadow-lg hover:to-accent px-6 py-5 transition rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105";
-        button.textContent = musicStatus === "playing" ? "Pause Music" : "Play Music";
+        // Pastikan hanya satu tombol kontrol musik
+        let button = document.getElementById("musicButton");
+        if (!button) {
+            button = document.createElement("button");
+            button.id = "musicButton";
+            button.className = "fixed bottom-4 right-4 bg-white text-black px-4 py-2 rounded-full shadow-lg hover:to-accent px-6 py-5 transition rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105";
+            button.textContent = musicStatus === "playing" ? "Pause Music" : "Play Music";
+            document.body.appendChild(button);
+        }
 
-        document.body.appendChild(button);
-
+        // Fungsi tombol play/pause
         button.addEventListener("click", function () {
             if (audio.paused) {
                 audio.play();
@@ -32,9 +34,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 localStorage.setItem("musicStatus", "paused");
                 button.textContent = "Play Music";
             }
-
-            // Kirim event ke tab lain agar sinkron
-            localStorage.setItem("musicEvent", Date.now());
         });
 
         // Sinkronisasi antar tab
