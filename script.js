@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
         audio.id = "bg-music";
         audio.src = "bg.mp3";
         audio.loop = true;
+        audio.autoplay = true; // Paksa auto-play
         document.body.appendChild(audio);
     }
 
@@ -13,17 +14,22 @@ document.addEventListener("DOMContentLoaded", function () {
     let lastPosition = localStorage.getItem("musicPosition") || 0;
     audio.currentTime = lastPosition;
 
-    // **Coba auto-play dengan metode delay**
+    // **Gunakan Web Audio API agar autoplay tidak diblokir**
+    let audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    let track = audioContext.createMediaElementSource(audio);
+    track.connect(audioContext.destination);
+
     function tryPlayAudio() {
-        let playPromise = audio.play();
-        if (playPromise !== undefined) {
-            playPromise.then(() => {
-                console.log("Musik berhasil auto-play!");
-            }).catch(() => {
-                console.log("Autoplay diblokir, mencoba ulang...");
-                setTimeout(tryPlayAudio, 500); // Coba lagi dalam 0.5 detik
-            });
-        }
+        audioContext.resume().then(() => {
+            let playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    console.log("Musik berhasil auto-play!");
+                }).catch(() => {
+                    console.log("Autoplay gagal, browser memblokir...");
+                });
+            }
+        });
     }
 
     if (musicStatus === "playing") {
@@ -32,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
         audio.pause();
     }
 
-    // **Buat tombol dengan teks awal "Pause Music"**
+    // **Tombol awal harus "Pause Music" karena musik auto-play**
     const button = document.createElement("button");
     button.id = "musicButton";
     button.className = "fixed bottom-4 right-4 bg-white text-black px-4 py-2 rounded-full shadow-lg hover:to-accent px-6 py-5 transition rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105";
@@ -42,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     button.addEventListener("click", function () {
         if (audio.paused) {
-            audio.play();
+            tryPlayAudio();
             localStorage.setItem("musicStatus", "playing");
             button.textContent = "Pause Music";
         } else {
@@ -65,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
     window.addEventListener("storage", function (event) {
         if (event.key === "musicStatus") {
             if (event.newValue === "playing") {
-                audio.play();
+                tryPlayAudio();
                 button.textContent = "Pause Music";
             } else {
                 audio.pause();
@@ -73,4 +79,9 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
     });
+
+    // **Jaminan auto-play berhasil setelah halaman load**
+    window.onload = function () {
+        setTimeout(tryPlayAudio, 100); // Paksa autoplay setelah 100ms
+    };
 });
