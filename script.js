@@ -5,9 +5,9 @@ document.addEventListener("DOMContentLoaded", function () {
         audio = document.createElement("audio");
         audio.id = "bg-music";
         audio.src = "bg.mp3";
-        audio.autoplay = true; // Paksa autoplay
+        audio.autoplay = true; // Musik otomatis diputar
         audio.loop = true;
-        audio.muted = false; // Pastikan tidak mute
+        audio.muted = false; // Pastikan suara aktif
         document.body.appendChild(audio);
     }
 
@@ -15,34 +15,26 @@ document.addEventListener("DOMContentLoaded", function () {
     let lastPosition = localStorage.getItem("musicPosition") || 0;
     audio.currentTime = lastPosition;
 
-    function tryPlayAudio() {
-        let playPromise = audio.play();
-        if (playPromise !== undefined) {
-            playPromise.then(() => {
-                console.log("Musik diputar otomatis!");
-            }).catch(() => {
-                console.log("Autoplay gagal, menunggu interaksi pengguna...");
-                document.addEventListener("click", () => {
-                    audio.play();
-                    localStorage.setItem("musicStatus", "playing");
-                }, { once: true });
-            });
-        }
-    }
-
     if (musicStatus === "playing") {
-        tryPlayAudio();
+        audio.play();
     } else {
         audio.pause();
     }
 
-    // Buat tombol dengan teks awal sesuai status musik
+    // Buat tombol dengan teks awal "Play Music" meskipun musik sudah berjalan
     const button = document.createElement("button");
     button.id = "musicButton";
     button.className = "fixed bottom-4 right-4 bg-white text-black px-4 py-2 rounded-full shadow-lg hover:to-accent px-6 py-5 transition rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105";
-    button.textContent = musicStatus === "playing" ? "Pause Music" : "Play Music";
+    button.textContent = "Play Music"; // Teks awal tetap "Play Music"
 
     document.body.appendChild(button);
+
+    // Setelah beberapa saat, ubah teks ke "Pause Music" karena musik auto-play
+    setTimeout(() => {
+        if (!audio.paused) {
+            button.textContent = "Pause Music";
+        }
+    }, 100);
 
     button.addEventListener("click", function () {
         if (audio.paused) {
