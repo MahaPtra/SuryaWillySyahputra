@@ -5,8 +5,9 @@ document.addEventListener("DOMContentLoaded", function () {
         audio = document.createElement("audio");
         audio.id = "bg-music";
         audio.src = "bg.mp3";
-        audio.autoplay = true; // Auto-play tetap ditambahkan
+        audio.autoplay = true; // Paksa autoplay
         audio.loop = true;
+        audio.muted = false; // Pastikan tidak mute
         document.body.appendChild(audio);
     }
 
@@ -14,8 +15,23 @@ document.addEventListener("DOMContentLoaded", function () {
     let lastPosition = localStorage.getItem("musicPosition") || 0;
     audio.currentTime = lastPosition;
 
+    function tryPlayAudio() {
+        let playPromise = audio.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                console.log("Musik diputar otomatis!");
+            }).catch(() => {
+                console.log("Autoplay gagal, menunggu interaksi pengguna...");
+                document.addEventListener("click", () => {
+                    audio.play();
+                    localStorage.setItem("musicStatus", "playing");
+                }, { once: true });
+            });
+        }
+    }
+
     if (musicStatus === "playing") {
-        audio.play();
+        tryPlayAudio();
     } else {
         audio.pause();
     }
