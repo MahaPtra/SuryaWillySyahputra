@@ -11,14 +11,27 @@
     <script>
         let audio = document.getElementById("bg-music");
 
-        // Cek apakah ini kunjungan pertama user
-        if (!sessionStorage.getItem("musicPlayed")) {
+        // Cek apakah ini user baru atau lama
+        let isUserNew = !localStorage.getItem("musicStatus");
+
+        if (isUserNew || localStorage.getItem("musicStatus") === "playing") {
             audio.autoplay = true;
             audio.play().catch(() => {
                 console.log("Autoplay diblokir, menunggu interaksi pengguna...");
             });
-            sessionStorage.setItem("musicPlayed", "true"); // Tandai bahwa musik sudah diputar sekali
+            localStorage.setItem("musicStatus", "playing");
         }
+
+        // Sinkronisasi antar tab agar musik tetap berjalan
+        window.addEventListener("storage", function (event) {
+            if (event.key === "musicStatus") {
+                if (event.newValue === "playing") {
+                    audio.play();
+                } else {
+                    audio.pause();
+                }
+            }
+        });
     </script>
 </body>
 </html>
