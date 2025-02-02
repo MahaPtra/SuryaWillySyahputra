@@ -1,0 +1,251 @@
+/* Hanya untuk navbar */
+nav {
+  font-family: 'Playfair Display', serif;
+}
+
+/* Menggunakan Roboto Mono untuk h1 dan h2 */
+h1, h2 {
+  font-family: 'Roboto Mono', monospace;
+}
+
+
+@layer base {
+  :root {
+      --background: 0 0% 100%;
+      --foreground: 240 10% 3.9%;
+      --card: 0 0% 100%;
+      --card-foreground: 240 10% 3.9%;
+      --popover: 0 0% 100%;
+      --popover-foreground: 240 10% 3.9%;
+      --primary: 240 5.9% 10%;
+      --primary-foreground: 0 0% 98%;
+      --secondary: 240 4.8% 95.9%;
+      --secondary-foreground: 240 5.9% 10%;
+      --muted: 240 4.8% 95.9%;
+      --muted-foreground: 240 3.8% 46.1%;
+      --accent: 240 4.8% 95.9%;
+      --accent-foreground: 240 5.9% 10%;
+      --destructive: 0 84.2% 60.2%;
+      --destructive-foreground: 0 0% 98%;
+      --border: 240 5.9% 90%;
+      --input: 240 5.9% 90%;
+      --ring: 240 5.9% 10%;
+      --radius: 0.5rem;
+  }
+
+  .dark {
+      --background: 240 10% 3.9%;
+      --foreground: 0 0% 98%;
+      --card: 240 10% 3.9%;
+      --card-foreground: 0 0% 98%;
+      --popover: 240 10% 3.9%;
+      --popover-foreground: 0 0% 98%;
+      --primary: 0 0% 98%;
+      --primary-foreground: 240 5.9% 10%;
+      --secondary: 240 3.7% 15.9%;
+      --secondary-foreground: 0 0% 98%;
+      --muted: 240 3.7% 15.9%;
+      --muted-foreground: 240 5% 64.9%;
+      --accent: 240 3.7% 15.9%;
+      --accent-foreground: 0 0% 98%;
+      --destructive: 0 62.8% 30.6%;
+      --destructive-foreground: 0 0% 98%;
+      --border: 240 3.7% 15.9%;
+      --input: 240 3.7% 15.9%;
+      --ring: 240 4.9% 83.9%;
+  }
+}
+
+/* Mobile responsiveness */
+@media screen and (max-width: 480px) {
+  #header {
+      height: auto;
+  }
+
+  #sidebar {
+      display: none;
+  }
+}
+
+/* Smooth fade transition for both text and image */
+.menu-text,
+.menu-image {
+  transition: opacity 0.5s ease-in-out;
+}
+
+/* Initially, the images are hidden */
+.menu-image.hidden {
+  display: none;
+}
+
+.menu-image.visible {
+  display: inline-block;
+  opacity: 1;
+}
+
+.menu-text.hidden {
+  opacity: 0;
+}
+
+/* Animasi Slide-In dari kiri untuk teks dan tombol */
+@keyframes slideInFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-100px); /* Mulai dari kiri luar layar */
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0); /* Akhirnya berada di posisi semula */
+  }
+}
+
+/* Animasi Slide-In dari kanan untuk gambar */
+@keyframes slideInFromRight {
+  0% {
+    opacity: 0;
+    transform: translateX(100px); /* Mulai dari kanan luar layar */
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0); /* Akhirnya berada di posisi semula */
+  }
+}
+
+/* Animasi Slide-In untuk teks dan tombol */
+.animate-slide-1 {
+  animation: slideInFromLeft 1s ease-out forwards;
+  opacity: 0; /* Sembunyikan awalnya */
+}
+
+.animate-slide-2 {
+  animation: slideInFromLeft 1s ease-out forwards;
+  animation-delay: 1s; /* Delay 1 detik setelah elemen pertama */
+  opacity: 0; /* Sembunyikan awalnya */
+}
+
+.animate-slide-3 {
+  animation: slideInFromLeft 1s ease-out forwards;
+  animation-delay: 2s; /* Delay 2 detik setelah elemen kedua */
+  opacity: 0; /* Sembunyikan awalnya */
+}
+
+.animate-button {
+  animation: slideInFromLeft 1s ease-out forwards;
+  animation-delay: 3s; /* Delay 3 detik setelah seluruh teks selesai animasi */
+  opacity: 0; /* Sembunyikan awalnya */
+}
+
+/* Animasi untuk gambar dengan animasi dari kanan */
+.animate-image {
+  animation: slideInFromBottom 1s ease-out forwards;
+  animation-delay: 3s; /* Delay untuk gambar */
+  opacity: 0; /* Sembunyikan awalnya */
+}
+
+/* Animasi dari kiri untuk About Me dan teks */
+@keyframes slideInFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Animasi dari kanan untuk gambar */
+@keyframes slideInFromRight {
+  0% {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Animasi dari bawah untuk Riwayat Pendidikan dan Skills */
+@keyframes slideInFromBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animasi untuk progress bar */
+@keyframes progressBar {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: var(--progress);
+  }
+}
+
+/* Style untuk progress bar */
+.progress-bar {
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  height: 10px;
+}
+
+.progress-bar-inner {
+  background-color: #950505; /* warna hijau untuk Software Developer */
+  border-radius: 0.5rem;
+  height: 100%;
+  animation: progressBar 2s ease-out forwards;
+}
+
+
+/* Animasi untuk teks */
+.animate-text-left {
+  animation: slideInFromLeft 1s ease-out forwards;
+}
+
+.animate-text-right {
+  animation: slideInFromRight 1s ease-out forwards;
+}
+
+.animate-text-bottom {
+  animation: slideInFromBottom 1s ease-out forwards;
+}
+
+.animate-progress-bar {
+  animation: progressBar 2s ease-out forwards;
+}
+
+/* Filter untuk gambar WhatsApp dan Instagram untuk mengubah warnanya menjadi putih */
+.logo-filter {
+  filter: invert(1);
+}
+
+/* Tambahkan class untuk logo gambar */
+a img {
+  transition: filter 0.3s ease;
+}
+
+/* Jika ingin animasi saat hover */
+a img:hover {
+  filter: invert(1);
+}
+
+/* Pesan Sukses */
+#success-message {
+  display: none; /* Sembunyikan pesan sukses pada awalnya */
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+#success-message.show {
+  display: block; /* Tampilkan pesan sukses */
+  opacity: 1; /* Transisi ke opacity penuh */
+  transform: translateY(0); /* Transisi ke posisi normal */
+}

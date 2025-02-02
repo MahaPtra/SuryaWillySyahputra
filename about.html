@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <link href="https://fonts.googleapis.com" rel="stylesheet">
+    <script src="script.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <title>About</title>
+  </head>
+
+  <body class="bg-gradient-to-r from-red-700 to-black text-white min-h-screen p-6"></body>
+    <!-- Navbar -->
+    <nav class="bg-gradient-to-r from-red-700 to-black p-4 flex justify-center items-center w-full">
+      <ul class="flex space-x-6">
+        <li><a href="home.html" class="text-white hover:underline">Home</a></li>
+        <li><a href="about.html" class="text-white hover:underline">About</a></li>
+        <li><a href="contact.html" class="text-white hover:underline">Contact</a></li>
+      </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="flex flex-col md:flex-row items-start mt-8">
+      <!-- Kiri: About Me -->
+      <div class="w-full md:w-1/1 animate-text-left">
+        <h2 class="text-3xl font-bold mb-4 text-left">About Me</h2>
+        <p class="text-justify text-zinc-200 animate-text-left">
+          Hallo, kenalin nama saya <b>Surya Willy Syahputra</b>, lahir di Cianjur pada tanggal 9 Maret 2006, anak semata wayang dari Lilik Kusworo (Ayah) dan Wiwin Suhertini (Ibu).<br>
+          Saat ini saya masih menempuh pendidikan di salah satu kampus yang berada di Dipatiukur, Universitas Komputer Indonesia dengan Program Studi S-1 Teknik Elektro, Fakultas Teknik dan Ilmu Komputer.<br>
+        </p>
+      </div>
+
+      <!-- Kanan: Foto -->
+      <div class="w-full md:w-1/1 flex justify-center animate-text-right">
+        <br><img src="willy 2.jpg" alt="Foto Profil" class="w-48 h-48 rounded-full shadow-lg">
+      </div>
+    </div>
+
+    <!-- Bawah: Riwayat Pendidikan & Skills -->
+    <div class="flex flex-col md:flex-row mt-8">
+      <!-- Kiri: Riwayat Pendidikan -->
+      <div class="w-full md:w-1/2 animate-text-bottom">
+        <h3 class="text-2xl font-bold mb-4">Riwayat Pendidikan</h3>
+        <table class="w-full text-left">
+          <thead>
+            <th class="p-2">Tahun</th>
+            <th class="p-2">Sekolah</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="p-2">2012 - 2018</td>
+              <td class="p-2">SDN Cipeyeum 02</td>
+            </tr>
+            <tr>
+              <td class="p-2">2018 - 2021</td>
+              <td class="p-2">SMPN 1 Haurwangi</td>
+            </tr>
+            <tr>
+              <td class="p-2">2021 - 2024</td>
+              <td class="p-2">SMAN 1 Ciranjang</td>
+            </tr>
+            <tr>
+              <td class="p-2">2024 - Sekarang</td>
+              <td class="p-2">Universitas Komputer Indonesia</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Kanan: Skills -->
+      <div class="w-full md:w-1/2 mt-6 md:mt-0 animate-text-bottom">
+        <h3 class="text-2xl font-bold mb-4">Skills</h3>
+        <div class="mb-4">
+          <span class="text-white">Fotografi (80%)</span>
+          <div class="progress-bar">
+            <div class="progress-bar-inner" style="--progress: 80%"></div>
+          </div>
+        </div>
+        <div class="mb-4">
+          <span class="text-white">Basket (70%)</span>
+          <div class="progress-bar">
+            <div class="progress-bar-inner" style="--progress: 70%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
