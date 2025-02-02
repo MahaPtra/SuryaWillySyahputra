@@ -13,45 +13,38 @@ document.addEventListener("DOMContentLoaded", function () {
     let lastPosition = localStorage.getItem("musicPosition") || 0;
     audio.currentTime = lastPosition;
 
-    // **Gunakan Web Audio API untuk bypass blokir autoplay**
-    let audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    let track = audioContext.createMediaElementSource(audio);
-    track.connect(audioContext.destination);
-
+    // **Coba auto-play dengan metode delay**
     function tryPlayAudio() {
         let playPromise = audio.play();
         if (playPromise !== undefined) {
             playPromise.then(() => {
-                console.log("Musik diputar otomatis!");
+                console.log("Musik berhasil auto-play!");
             }).catch(() => {
-                console.log("Autoplay gagal, menunggu interaksi pengguna...");
+                console.log("Autoplay diblokir, mencoba ulang...");
+                setTimeout(tryPlayAudio, 500); // Coba lagi dalam 0.5 detik
             });
         }
     }
 
     if (musicStatus === "playing") {
-        audioContext.resume().then(() => {
-            tryPlayAudio();
-        });
+        tryPlayAudio();
     } else {
         audio.pause();
     }
 
-    // **Tombol tetap "Pause Music" saat pertama kali masuk**
+    // **Buat tombol dengan teks awal "Pause Music"**
     const button = document.createElement("button");
     button.id = "musicButton";
     button.className = "fixed bottom-4 right-4 bg-white text-black px-4 py-2 rounded-full shadow-lg hover:to-accent px-6 py-5 transition rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105";
-    button.textContent = "Pause Music";
+    button.textContent = "Pause Music"; // Teks awal langsung "Pause Music"
 
     document.body.appendChild(button);
 
     button.addEventListener("click", function () {
         if (audio.paused) {
-            audioContext.resume().then(() => {
-                audio.play();
-                localStorage.setItem("musicStatus", "playing");
-                button.textContent = "Pause Music";
-            });
+            audio.play();
+            localStorage.setItem("musicStatus", "playing");
+            button.textContent = "Pause Music";
         } else {
             audio.pause();
             localStorage.setItem("musicStatus", "paused");
