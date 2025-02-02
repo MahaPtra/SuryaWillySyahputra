@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
         audio = document.createElement("audio");
         audio.id = "bg-music";
         audio.src = "bg.mp3";
+        audio.autoplay = true; // Auto-play tetap ditambahkan
         audio.loop = true;
         document.body.appendChild(audio);
     }
