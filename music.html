@@ -6,6 +6,19 @@
     <title>Music Auto-Play</title>
 </head>
 <body>
-    <audio id="bg-music" src="bg.mp3" autoplay loop></audio>
+    <audio id="bg-music" src="bg.mp3" loop></audio>
+
+    <script>
+        let audio = document.getElementById("bg-music");
+
+        // Cek apakah ini kunjungan pertama user
+        if (!sessionStorage.getItem("musicPlayed")) {
+            audio.autoplay = true;
+            audio.play().catch(() => {
+                console.log("Autoplay diblokir, menunggu interaksi pengguna...");
+            });
+            sessionStorage.setItem("musicPlayed", "true"); // Tandai bahwa musik sudah diputar sekali
+        }
+    </script>
 </body>
 </html>
