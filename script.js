@@ -11,16 +11,14 @@ document.addEventListener("DOMContentLoaded", function () {
         document.body.appendChild(audio);
     }
 
-    // Ambil status musik dari sessionStorage (bukan localStorage, agar hanya untuk satu sesi/tab)
-    let musicStatus = sessionStorage.getItem("musicStatus");
+    // Ambil status musik & posisi terakhir dari localStorage
+    let musicStatus = localStorage.getItem("musicStatus");
+    let lastPosition = localStorage.getItem("musicPosition") || 0;
 
-    // Jika user belum pernah klik play/pause, set status default ke 'paused'
-    if (musicStatus === null) {
-        sessionStorage.setItem("musicStatus", "paused");
-        musicStatus = "paused";
-    }
+    // Set posisi terakhir sebelum dimainkan
+    audio.currentTime = lastPosition;
 
-    // Jika musik terakhir diputar, lanjutkan saat kembali ke tab
+    // Jika musik terakhir dalam keadaan "playing", lanjutkan
     if (musicStatus === "playing") {
         audio.play().catch(() => {
             console.log("Autoplay diblokir, menunggu interaksi user");
@@ -38,26 +36,34 @@ document.addEventListener("DOMContentLoaded", function () {
     button.addEventListener("click", function () {
         if (audio.paused) {
             audio.play();
-            sessionStorage.setItem("musicStatus", "playing");
+            localStorage.setItem("musicStatus", "playing");
             button.textContent = "Pause Music";
         } else {
             audio.pause();
-            sessionStorage.setItem("musicStatus", "paused");
+            localStorage.setItem("musicStatus", "paused");
             button.textContent = "Play Music";
         }
     });
 
+    // Simpan posisi lagu setiap 1 detik agar tidak mengulang dari awal saat pindah halaman
+    setInterval(() => {
+        if (!audio.paused) {
+            localStorage.setItem("musicPosition", audio.currentTime);
+        }
+    }, 1000);
+
     // Pastikan musik tetap berjalan saat user kembali ke tab
     window.addEventListener("focus", function () {
-        let musicStatus = sessionStorage.getItem("musicStatus");
+        let musicStatus = localStorage.getItem("musicStatus");
         if (musicStatus === "playing") {
             audio.play();
             button.textContent = "Pause Music";
         }
     });
 
-    // Reset musik saat user keluar dan kembali lagi
+    // Reset musik saat user benar-benar keluar dari browser
     window.addEventListener("beforeunload", function () {
-        sessionStorage.removeItem("musicStatus"); // Reset status agar musik mulai dari awal saat reload
+        localStorage.removeItem("musicStatus"); // Reset status agar musik mulai dari awal saat reload penuh
+        localStorage.removeItem("musicPosition"); // Reset posisi musik
     });
 });
