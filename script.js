@@ -11,16 +11,16 @@ document.addEventListener("DOMContentLoaded", function () {
         document.body.appendChild(audio);
     }
 
-    // Cek status musik di Local Storage
-    let musicStatus = localStorage.getItem("musicStatus");
+    // Ambil status musik dari sessionStorage (bukan localStorage, agar hanya untuk satu sesi/tab)
+    let musicStatus = sessionStorage.getItem("musicStatus");
 
     // Jika user belum pernah klik play/pause, set status default ke 'paused'
     if (musicStatus === null) {
-        localStorage.setItem("musicStatus", "paused");
+        sessionStorage.setItem("musicStatus", "paused");
         musicStatus = "paused";
     }
 
-    // Jika musik terakhir diputar, lanjutkan
+    // Jika musik terakhir diputar, lanjutkan saat kembali ke tab
     if (musicStatus === "playing") {
         audio.play().catch(() => {
             console.log("Autoplay diblokir, menunggu interaksi user");
@@ -38,17 +38,26 @@ document.addEventListener("DOMContentLoaded", function () {
     button.addEventListener("click", function () {
         if (audio.paused) {
             audio.play();
-            localStorage.setItem("musicStatus", "playing");
+            sessionStorage.setItem("musicStatus", "playing");
             button.textContent = "Pause Music";
         } else {
             audio.pause();
-            localStorage.setItem("musicStatus", "paused");
+            sessionStorage.setItem("musicStatus", "paused");
             button.textContent = "Play Music";
+        }
+    });
+
+    // Pastikan musik tetap berjalan saat user kembali ke tab
+    window.addEventListener("focus", function () {
+        let musicStatus = sessionStorage.getItem("musicStatus");
+        if (musicStatus === "playing") {
+            audio.play();
+            button.textContent = "Pause Music";
         }
     });
 
     // Reset musik saat user keluar dan kembali lagi
     window.addEventListener("beforeunload", function () {
-        localStorage.removeItem("musicStatus"); // Hapus status agar reset saat reload
+        sessionStorage.removeItem("musicStatus"); // Reset status agar musik mulai dari awal saat reload
     });
 });
