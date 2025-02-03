@@ -22,7 +22,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Jika musik terakhir diputar, lanjutkan
     if (musicStatus === "playing") {
-        audio.play();
+        audio.play().catch(() => {
+            console.log("Autoplay diblokir, menunggu interaksi user");
+        });
     }
 
     // Buat tombol Play/Pause
@@ -42,20 +44,6 @@ document.addEventListener("DOMContentLoaded", function () {
             audio.pause();
             localStorage.setItem("musicStatus", "paused");
             button.textContent = "Play Music";
-        }
-    });
-
-    // Pastikan musik tetap lanjut saat pindah tab, tapi tidak auto-play jika user pause
-    document.addEventListener("visibilitychange", function () {
-        if (!document.hidden) {
-            let musicStatus = localStorage.getItem("musicStatus");
-            if (musicStatus === "playing") {
-                audio.play();
-                button.textContent = "Pause Music";
-            } else {
-                audio.pause();
-                button.textContent = "Play Music";
-            }
         }
     });
 
