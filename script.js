@@ -52,18 +52,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }, 1000);
 
-    // Pastikan musik tetap berjalan saat user kembali ke tab
+    // Pastikan musik tetap berjalan saat user kembali ke tab (tanpa double play)
     window.addEventListener("focus", function () {
         let musicStatus = localStorage.getItem("musicStatus");
-        if (musicStatus === "playing") {
+        if (musicStatus === "playing" && audio.paused) {
             audio.play();
             button.textContent = "Pause Music";
         }
-    });
-
-    // Reset musik saat user benar-benar keluar dari browser
-    window.addEventListener("beforeunload", function () {
-        localStorage.removeItem("musicStatus"); // Reset status agar musik mulai dari awal saat reload penuh
-        localStorage.removeItem("musicPosition"); // Reset posisi musik
     });
 });
